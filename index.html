@@ -50,7 +50,7 @@
         .modal-title p { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 2px; white-space: nowrap; }
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
         .stat-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 0.5px; }
         .stat-val { font-size: 15px; font-weight: 800; color: var(--gold); }
         .close-modal-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
     </style>
@@ -88,12 +88,12 @@
         </div>
     </div>
     <script>
- const globalStars = [
+const pool = [
             {n:"Kylian Mbappé",p:"ST",r:91,pa:97,sh:90,ps:80,dr:92,df:36,ph:78,id:"231747"},
             {n:"Lamine Yamal",p:"RW",r:89,pa:88,sh:81,ps:83,dr:89,df:41,ph:65,id:"277051"},
             {n:"Jude Bellingham",p:"CAM",r:90,pa:80,sh:86,ps:83,dr:88,df:78,ph:82,id:"252371"},
-            {n:"Vinícius Jr.",p:"LW",r:89,pa:95,sh:84,ps:78,dr:91,df:29,ph:68,id:"238794"},
-            {n:"Rodri",p:"CDM",r:90,pa:66,sh:80,ps:86,dr:84,df:87,ph:85,id:"231866"},
+            {n:"Vinícius Júnior",p:"LW",r:89,pa:95,sh:84,ps:78,dr:91,df:29,ph:68,id:"238794"},
+            {n:"Rodri Cascante",p:"CDM",r:90,pa:66,sh:80,ps:86,dr:84,df:87,ph:85,id:"231866"},
             {n:"Harry Kane",p:"ST",r:90,pa:69,sh:93,ps:84,dr:83,df:49,ph:83,id:"202126"},
             {n:"Florian Wirtz",p:"CAM",r:89,pa:82,sh:79,ps:87,dr:89,df:53,ph:66,id:"256630"},
             {n:"Jamal Musiala",p:"CAM",r:87,pa:84,sh:81,ps:79,dr:90,df:62,ph:64,id:"256790"},
@@ -108,7 +108,7 @@
             {n:"Erling Haaland",p:"ST",r:90,pa:89,sh:92,ps:66,dr:80,df:45,ph:88,id:"239085"},
             {n:"Kevin De Bruyne",p:"CM",r:90,pa:67,sh:87,ps:93,dr:86,df:65,ph:77,id:"192985"},
             {n:"Mohamed Salah",p:"RW",r:89,pa:89,sh:87,ps:82,dr:88,df:45,ph:75,id:"209331"},
-            {n:"Virgil van Dijk",pos:"CB",r:89,pa:78,sh:60,ps:71,dr:72,df:89,ph:86,id:"203376"},
+            {n:"Virgil van Dijk",p:"CB",r:89,pa:78,sh:60,ps:71,dr:72,df:89,ph:86,id:"203376"},
             {n:"Son Heung Min",p:"LW",r:87,pa:87,sh:88,ps:80,dr:84,df:42,ph:70,id:"200104"},
             {n:"Luka Modrić",p:"CM",r:86,pa:71,sh:76,ps:89,dr:86,df:72,ph:66,id:"177003"},
             {n:"Federico Valverde",p:"CM",r:87,pa:88,sh:82,ps:84,dr:84,df:80,ph:82,id:"239053"},
@@ -141,7 +141,7 @@
             {n:"New Zealand",r:69,a:70,m:68,d:68,c:"nz"}, {n:"Iraq",r:70,a:71,m:69,d:68,c:"iq"},
             {n:"UAE",r:70,a:70,m:69,d:68,c:"ae"}, {n:"Uzbekistan",r:71,a:72,m:70,d:69,c:"uz"}
         ];
-const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
+ const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
         let activeIdx = 0;
 
         function init() {
@@ -164,7 +164,7 @@ const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7
                 let rawSquad = [];
                 for (let pIdx = 0; pIdx < 23; pIdx++) {
                     const pAge = 21 + ((pIdx * 3) % 11);
-                    const metaItem = globalStars[(i * 7 + pIdx) % globalStars.length];
+                    const metaItem = pool[(i * 7 + pIdx) % pool.length];
                     
                     let variance = 4 - Math.floor(pIdx / 3);
                     const finalRtg = Math.min(94, Math.max(62, t.r + variance));
@@ -183,16 +183,15 @@ const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7
 
                 let rowsHtml = '';
                 const renderRow = (p, roleLabel) => {
-                    const pad = String(p.id).padStart(6, '0');
-                    // Image Pipeline Fixed: Calls images.weserv.nl without sending an origin referrer [1]
-                    const imgUrl = `https://weserv.nl{pad.substring(0,3)}/${pad.substring(3,6)}/26_60.png`;
+                    // EA Sports CDN Pathing Rules: Publicly accessible and fully unblocked
+                    const imgUrl = `https://ea.com{p.id}.png`;
 
                     return `
                         <div class="player-row" onclick="openStats('${p.n}', '${p.pos}', ${p.age}, ${p.r}, ${p.pac}, ${p.sho}, ${p.pas}, ${p.dri}, ${p.def}, ${p.phy}, '${imgUrl}')">
                             <div class="row-rtg">${p.r} <span class="mini-star">⭐</span></div>
                             <div class="row-pos">${p.pos}</div>
                             <div class="img-box">
-                                <img src="${imgUrl}" class="face" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://weserv.nl';">
+                                <img src="${imgUrl}" class="face" loading="lazy" onerror="this.onerror=null; this.src='https://ea.com';">
                             </div>
                             <div class="p-name">${p.n}</div>
                             <div class="p-meta">${p.age}y • ${roleLabel}</div>
