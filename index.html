@@ -26,7 +26,6 @@
         .pill strong { color: var(--gold); }
         .ovr-circ { background: var(--gold); color: #000; width: 40px; height: 40px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; }
         .ovr-circ span { font-size: 8px; margin-top: -2px; }
-        
         .list-container { display: flex; flex-direction: column; gap: 4px; }
         .player-row { background: var(--card); border: 1px solid var(--border); border-radius: 6px; display: flex; align-items: center; padding: 0 10px; height: 42px; gap: 10px; cursor: pointer; }
         .player-row:active { background: #1d283a; }
@@ -37,10 +36,8 @@
         .face { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
         .p-name { font-size: 13px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .p-meta { font-size: 11px; color: var(--muted); text-align: right; white-space: nowrap; }
-        
         .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
         .nav-btn { background: none; border: none; color: var(--gold); font-size: 13px; font-weight: 700; cursor: pointer; }
-
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
         .modal.open { display: flex; }
         .modal-card { background: linear-gradient(135deg, #1a2233 0%, #0d131f 100%); width: 100%; max-width: 310px; border-radius: 16px; border: 2px solid var(--gold); padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); position: relative; }
@@ -50,7 +47,7 @@
         .modal-title p { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 2px; white-space: nowrap; }
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
         .stat-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; }
         .stat-val { font-size: 15px; font-weight: 800; color: var(--gold); }
         .close-modal-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
     </style>
@@ -66,7 +63,6 @@
         <button class="nav-btn" style="color:var(--muted);" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲ Top</button>
         <button class="nav-btn" onclick="move(1)">Next Team ▶</button>
     </div>
-
     <div class="modal" id="stats-modal" onclick="closeModal()">
         <div class="modal-card" onclick="event.stopPropagation()">
             <div class="modal-head">
@@ -88,7 +84,7 @@
         </div>
     </div>
     <script>
-   const pool = [
+        const basePlayers = [
             {n:"Kylian Mbappé",p:"ST",r:91,pa:97,sh:90,ps:80,dr:92,df:36,ph:78,id:"231747"},
             {n:"Lamine Yamal",p:"RW",r:89,pa:88,sh:81,ps:83,dr:89,df:41,ph:65,id:"277051"},
             {n:"Jude Bellingham",p:"CAM",r:90,pa:80,sh:86,ps:83,dr:88,df:78,ph:82,id:"252371"},
@@ -115,6 +111,32 @@
             {n:"Achraf Hakimi",p:"RB",r:84,pa:92,sh:75,ps:80,dr:83,df:76,ph:78,id:"235212"}
         ];
 
+        const teamsData = [
+            {n:"France",r:86,a:87,m:85,d:85,c:"fr"}, {n:"Spain",r:85,a:85,m:86,d:83,c:"es"},
+            {n:"England",r:84,a:86,m:85,d:83,c:"en"}, {n:"Portugal",r:84,a:84,m:86,d:84,c:"pt"},
+            {n:"Brazil",r:83,a:86,m:81,d:83,c:"br"}, {n:"Argentina",r:83,a:84,m:83,d:80,c:"ar"},
+            {n:"Germany",r:82,a:81,m:83,d:80,c:"de"}, {n:"Italy",r:82,a:80,m:82,d:82,c:"it"},
+            {n:"Netherlands",r:82,a:80,m:81,d:83,c:"nl"}, {n:"Belgium",r:81,a:80,m:81,d:79,c:"be"},
+            {n:"Croatia",r:80,a:77,m:82,d:79,c:"hr"}, {n:"Uruguay",r:80,a:80,m:81,d:78,c:"uy"},
+            {n:"Morocco",r:80,a:79,m:80,d:79,c:"ma"}, {n:"USA",r:79,a:78,m:79,d:78,c:"us"},
+            {n:"Colombia",r:79,a:79,m:78,d:77,c:"co"}, {n:"Japan",r:79,a:77,m:79,d:78,c:"jp"},
+            {n:"Senegal",r:78,a:78,m:77,d:77,c:"sn"}, {n:"Switzerland",r:78,a:76,m:79,d:77,c:"ch"},
+            {n:"Denmark",r:78,a:76,m:78,d:77,c:"dk"}, {n:"Nigeria",r:78,a:81,m:74,d:75,c:"ng"},
+            {n:"Mexico",r:76,a:78,m:75,d:75,c:"mx"}, {n:"South Korea",r:76,a:79,m:75,d:73,c:"kr"},
+            {n:"Ukraine",r:76,a:76,m:76,d:75,c:"ua"}, {n:"Sweden",r:76,a:80,m:74,d:74,c:"se"},
+            {n:"Poland",r:76,a:77,m:74,d:74,c:"pl"}, {n:"Turkey",r:76,a:75,m:76,d:74,c:"tr"},
+            {n:"Austria",r:76,a:74,m:77,d:75,c:"at"}, {n:"Ecuador",r:76,a:74,m:76,d:76,c:"ec"},
+            {n:"Iran",r:75,a:77,m:73,d:72,c:"ir"}, {n:"Cameroon",r:75,a:76,m:74,d:73,c:"cm"},
+            {n:"Tunisia",r:74,a:72,m:74,d:73,c:"tn"}, {n:"Egypt",r:74,a:77,m:72,d:71,c:"eg"},
+            {n:"Canada",r:74,a:76,m:72,d:72,c:"ca"}, {n:"Chile",r:74,a:73,m:74,d:73,c:"cl"},
+            {n:"Peru",r:74,a:72,m:73,d:73,c:"pe"}, {n:"Saudi Arabia",r:73,a:72,m:73,d:72,c:"sa"},
+            {n:"Australia",r:73,a:71,m:72,d:72,c:"au"}, {n:"Costa Rica",r:72,a:71,m:71,d:71,c:"cr"},
+            {n:"Panama",r:71,a:70,m:71,d:70,c:"pa"}, {n:"Algeria",r:75,a:76,m:75,d:73,c:"dz"},
+            {n:"Ghana",r:75,a:76,m:75,d:74,c:"gh"}, {n:"Ivory Coast",r:76,a:76,m:76,d:75,c:"ci"},
+            {n:"Jamaica",r:72,a:74,m:70,d:69,c:"jm"}, {n:"Honduras",r:70,a:69,m:69,d:68,c:"hn"},
+            {n:"New Zealand",r:69,a:70,m:68,d:68,c:"nz"}, {n:"Iraq",r:70,a:71,m:69,d:68,c:"iq"},
+            {n:"UAE",r:70,a:70,m:69,d:68,c:"ae"}, {n:"Uzbekistan",r:71,a:72,m:70,d:69,c:"uz"}
+        ];
         const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
         let activeIdx = 0;
 
@@ -138,15 +160,13 @@
                 let rawSquad = [];
                 for (let pIdx = 0; pIdx < 23; pIdx++) {
                     const pAge = 21 + ((pIdx * 3) % 11);
-                    const metaItem = pool[(i * 7 + pIdx) % pool.length];
-                    let pName = t.n.substring(0,3) + ". " + metaItem.n;
-                    if(t.n === "France" && pIdx < pool.length) pName = pool[pIdx].n;
+                    const metaItem = basePlayers[(i * 7 + pIdx) % basePlayers.length];
                     
                     let variance = 4 - Math.floor(pIdx / 3);
                     const finalRtg = Math.min(94, Math.max(62, t.r + variance));
 
                     rawSquad.push({ 
-                        n: pName, pos: metaItem.p, r: finalRtg, age: pAge,
+                        n: metaItem.n, pos: metaItem.p, r: finalRtg, age: pAge,
                         pac: metaItem.pa, sho: metaItem.sh, pas: metaItem.ps, dri: metaItem.dr, def: metaItem.df, phy: metaItem.ph, id: metaItem.id 
                     });
                 }
@@ -159,15 +179,14 @@
 
                 let rowsHtml = '';
                 const renderRow = (p, roleLabel) => {
-                    const pad = String(p.id).padStart(6, '0');
-                    const imgUrl = `https://weserv.nl{pad.substring(0,3)}/${pad.substring(3,6)}/26_60.png`;
+                    const imgUrl = `https://ea.com{p.id}.png`;
 
                     return `
                         <div class="player-row" onclick="openStats('${p.n}', '${p.pos}', ${p.age}, ${p.r}, ${p.pac}, ${p.sho}, ${p.pas}, ${p.dri}, ${p.def}, ${p.phy}, '${imgUrl}')">
                             <div class="row-rtg">${p.r} <span class="mini-star">⭐</span></div>
                             <div class="row-pos">${p.pos}</div>
                             <div class="img-box">
-                                <img src="${imgUrl}" class="face" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://weserv.nl';">
+                                <img src="${imgUrl}" class="face" loading="lazy" onerror="this.onerror=null; this.src='https://ea.com';">
                             </div>
                             <div class="p-name">${p.n}</div>
                             <div class="p-meta">${p.age}y • ${roleLabel}</div>
