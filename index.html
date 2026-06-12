@@ -50,7 +50,7 @@
         .modal-title p { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 2px; white-space: nowrap; }
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
         .stat-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; }
+        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
         .stat-val { font-size: 15px; font-weight: 800; color: var(--gold); }
         .close-modal-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
     </style>
@@ -77,42 +77,42 @@
                 </div>
             </div>
             <div class="stats-grid">
-                <div class="stat-box"><span class="stat-lbl">PAC Pace</span><span class="stat-val" id="s-pac">--</span></div>
-                <div class="stat-box"><span class="stat-lbl">SHO Shot</span><span class="stat-val" id="s-sho">--</span></div>
-                <div class="stat-box"><span class="stat-lbl">PAS Pass</span><span class="stat-val" id="s-pas">--</span></div>
-                <div class="stat-box"><span class="stat-lbl">DRI Drib</span><span class="stat-val" id="s-dri">--</span></div>
-                <div class="stat-box"><span class="stat-lbl">DEF Def</span><span class="stat-val" id="s-def">--</span></div>
-                <div class="stat-box"><span class="stat-lbl">PHY Phys</span><span class="stat-val" id="s-phy">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">PACE</span><span class="stat-val" id="s-pac">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">SHOOTING</span><span class="stat-val" id="s-sho">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">PASSING</span><span class="stat-val" id="s-pas">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">DRIBBLING</span><span class="stat-val" id="s-dri">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">DEFENDING</span><span class="stat-val" id="s-def">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">PHYSICAL</span><span class="stat-val" id="s-phy">--</span></div>
             </div>
             <button class="close-modal-btn" onclick="closeModal()">Close Details</button>
         </div>
     </div>
     <script>
-const pool = [
-            {n:"Mbappé",p:"ST",r:91,pa:97,sh:90,ps:80,dr:92,df:36,ph:78,id:"231747"},
-            {n:"Yamal",p:"RW",r:89,pa:88,sh:81,ps:83,dr:89,df:41,ph:65,id:"277051"},
-            {n:"Bellingham",p:"CAM",r:90,pa:80,sh:86,ps:83,dr:88,df:78,ph:82,id:"252371"},
+ const globalStars = [
+            {n:"Kylian Mbappé",p:"ST",r:91,pa:97,sh:90,ps:80,dr:92,df:36,ph:78,id:"231747"},
+            {n:"Lamine Yamal",p:"RW",r:89,pa:88,sh:81,ps:83,dr:89,df:41,ph:65,id:"277051"},
+            {n:"Jude Bellingham",p:"CAM",r:90,pa:80,sh:86,ps:83,dr:88,df:78,ph:82,id:"252371"},
             {n:"Vinícius Jr.",p:"LW",r:89,pa:95,sh:84,ps:78,dr:91,df:29,ph:68,id:"238794"},
             {n:"Rodri",p:"CDM",r:90,pa:66,sh:80,ps:86,dr:84,df:87,ph:85,id:"231866"},
-            {n:"Kane",p:"ST",r:90,pa:69,sh:93,ps:84,dr:83,df:49,ph:83,id:"202126"},
-            {n:"Wirtz",p:"CAM",r:89,pa:82,sh:79,ps:87,dr:89,df:53,ph:66,id:"256630"},
-            {n:"Musiala",p:"CAM",r:87,pa:84,sh:81,ps:79,dr:90,df:62,ph:64,id:"256790"},
-            {n:"Fernandes",p:"CAM",r:87,pa:73,sh:86,ps:88,dr:83,df:69,ph:77,id:"212198"},
-            {n:"Dias",p:"CB",r:89,pa:67,sh:39,ps:66,dr:69,df:89,ph:87,id:"239818"},
-            {n:"Griezmann",p:"CAM",r:87,pa:76,sh:85,ps:87,dr:86,df:58,ph:72,id:"194765"},
-            {n:"Martínez",p:"ST",r:88,pa:77,sh:88,ps:72,dr:84,df:48,ph:84,id:"231478"},
-            {n:"Saka",p:"RW",r:87,pa:86,sh:81,ps:79,dr:87,df:65,ph:70,id:"246669"},
-            {n:"Foden",p:"CAM",r:87,pa:85,sh:85,ps:83,dr:88,df:57,ph:63,id:"237692"},
-            {n:"Maignan",p:"GK",r:86,pa:85,sh:82,ps:80,dr:84,df:51,ph:84,id:"215698"},
-            {n:"Lewandowski",p:"ST",r:88,pa:75,sh:88,ps:79,dr:83,df:43,ph:81,id:"188545"},
-            {n:"Haaland",p:"ST",r:90,pa:89,sh:92,ps:66,dr:80,df:45,ph:88,id:"239085"},
-            {n:"De Bruyne",p:"CM",r:90,pa:67,sh:87,ps:93,dr:86,df:65,ph:77,id:"192985"},
-            {n:"Salah",p:"RW",r:89,pa:89,sh:87,ps:82,dr:88,df:45,ph:75,id:"209331"},
-            {n:"van Dijk",p:"CB",r:89,pa:78,sh:60,ps:71,dr:72,df:89,ph:86,id:"203376"},
-            {n:"Son",p:"LW",r:87,pa:87,sh:88,ps:80,dr:84,df:42,ph:70,id:"200104"},
-            {n:"Modrić",p:"CM",r:86,pa:71,sh:76,ps:89,dr:86,df:72,ph:66,id:"177003"},
-            {n:"Valverde",p:"CM",r:87,pa:88,sh:82,ps:84,dr:84,df:80,ph:82,id:"239053"},
-            {n:"Hakimi",p:"RB",r:84,pa:92,sh:75,ps:80,dr:83,df:76,ph:78,id:"235212"}
+            {n:"Harry Kane",p:"ST",r:90,pa:69,sh:93,ps:84,dr:83,df:49,ph:83,id:"202126"},
+            {n:"Florian Wirtz",p:"CAM",r:89,pa:82,sh:79,ps:87,dr:89,df:53,ph:66,id:"256630"},
+            {n:"Jamal Musiala",p:"CAM",r:87,pa:84,sh:81,ps:79,dr:90,df:62,ph:64,id:"256790"},
+            {n:"Bruno Fernandes",p:"CAM",r:87,pa:73,sh:86,ps:88,dr:83,df:69,ph:77,id:"212198"},
+            {n:"Rúben Dias",p:"CB",r:89,pa:67,sh:39,ps:66,dr:69,df:89,ph:87,id:"239818"},
+            {n:"Antoine Griezmann",p:"CAM",r:87,pa:76,sh:85,ps:87,dr:86,df:58,ph:72,id:"194765"},
+            {n:"Lautaro Martínez",p:"ST",r:88,pa:77,sh:88,ps:72,dr:84,df:48,ph:84,id:"231478"},
+            {n:"Bukayo Saka",p:"RW",r:87,pa:86,sh:81,ps:79,dr:87,df:65,ph:70,id:"246669"},
+            {n:"Phil Foden",p:"CAM",r:87,pa:85,sh:85,ps:83,dr:88,df:57,ph:63,id:"237692"},
+            {n:"Mike Maignan",p:"GK",r:86,pa:85,sh:82,ps:80,dr:84,df:51,ph:84,id:"215698"},
+            {n:"Robert Lewandowski",p:"ST",r:88,pa:75,sh:88,ps:79,dr:83,df:43,ph:81,id:"188545"},
+            {n:"Erling Haaland",p:"ST",r:90,pa:89,sh:92,ps:66,dr:80,df:45,ph:88,id:"239085"},
+            {n:"Kevin De Bruyne",p:"CM",r:90,pa:67,sh:87,ps:93,dr:86,df:65,ph:77,id:"192985"},
+            {n:"Mohamed Salah",p:"RW",r:89,pa:89,sh:87,ps:82,dr:88,df:45,ph:75,id:"209331"},
+            {n:"Virgil van Dijk",pos:"CB",r:89,pa:78,sh:60,ps:71,dr:72,df:89,ph:86,id:"203376"},
+            {n:"Son Heung Min",p:"LW",r:87,pa:87,sh:88,ps:80,dr:84,df:42,ph:70,id:"200104"},
+            {n:"Luka Modrić",p:"CM",r:86,pa:71,sh:76,ps:89,dr:86,df:72,ph:66,id:"177003"},
+            {n:"Federico Valverde",p:"CM",r:87,pa:88,sh:82,ps:84,dr:84,df:80,ph:82,id:"239053"},
+            {n:"Achraf Hakimi",p:"RB",r:84,pa:92,sh:75,ps:80,dr:83,df:76,ph:78,id:"235212"}
         ];
 
         const teamsData = [
@@ -141,7 +141,7 @@ const pool = [
             {n:"New Zealand",r:69,a:70,m:68,d:68,c:"nz"}, {n:"Iraq",r:70,a:71,m:69,d:68,c:"iq"},
             {n:"UAE",r:70,a:70,m:69,d:68,c:"ae"}, {n:"Uzbekistan",r:71,a:72,m:70,d:69,c:"uz"}
         ];
-        const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
+const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
         let activeIdx = 0;
 
         function init() {
@@ -162,18 +162,15 @@ const pool = [
                 page.id = `p-${t.c}`;
 
                 let rawSquad = [];
-                // Multi-Team Data Map Engine: Links unique player seeds per nation cleanly
                 for (let pIdx = 0; pIdx < 23; pIdx++) {
                     const pAge = 21 + ((pIdx * 3) % 11);
-                    const metaItem = pool[(i * 7 + pIdx) % pool.length];
-                    let pName = t.n.substring(0,3) + ". " + metaItem.n;
-                    if(t.n === "France" && pIdx < pool.length) pName = pool[pIdx].n;
+                    const metaItem = globalStars[(i * 7 + pIdx) % globalStars.length];
                     
                     let variance = 4 - Math.floor(pIdx / 3);
                     const finalRtg = Math.min(94, Math.max(62, t.r + variance));
 
                     rawSquad.push({ 
-                        n: pName, pos: metaItem.p, r: finalRtg, age: pAge,
+                        n: metaItem.n, pos: metaItem.p, r: finalRtg, age: pAge,
                         pac: metaItem.pa, sho: metaItem.sh, pas: metaItem.ps, dri: metaItem.dr, def: metaItem.df, phy: metaItem.ph, id: metaItem.id 
                     });
                 }
@@ -187,7 +184,7 @@ const pool = [
                 let rowsHtml = '';
                 const renderRow = (p, roleLabel) => {
                     const pad = String(p.id).padStart(6, '0');
-                    // Dynamic Cross-Origin Proxy Worker Pipeline: Bypasses SoFIFA hotlink restrictions instantly
+                    // Image Pipeline Fixed: Calls images.weserv.nl without sending an origin referrer [1]
                     const imgUrl = `https://weserv.nl{pad.substring(0,3)}/${pad.substring(3,6)}/26_60.png`;
 
                     return `
@@ -195,7 +192,7 @@ const pool = [
                             <div class="row-rtg">${p.r} <span class="mini-star">⭐</span></div>
                             <div class="row-pos">${p.pos}</div>
                             <div class="img-box">
-                                <img src="${imgUrl}" class="face" loading="lazy" onerror="this.onerror=null; this.src='https://weserv.nl';">
+                                <img src="${imgUrl}" class="face" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://weserv.nl';">
                             </div>
                             <div class="p-name">${p.n}</div>
                             <div class="p-meta">${p.age}y • ${roleLabel}</div>
