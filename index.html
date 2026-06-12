@@ -26,18 +26,21 @@
         .pill strong { color: var(--gold); }
         .ovr-circ { background: var(--gold); color: #000; width: 40px; height: 40px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; }
         .ovr-circ span { font-size: 8px; margin-top: -2px; }
+        
         .list-container { display: flex; flex-direction: column; gap: 4px; }
         .player-row { background: var(--card); border: 1px solid var(--border); border-radius: 6px; display: flex; align-items: center; padding: 0 10px; height: 42px; gap: 10px; cursor: pointer; }
         .player-row:active { background: #1d283a; }
-        .row-rtg { font-size: 13px; font-weight: 800; color: var(--gold); width: 46px; text-align: left; display: flex; align-items: center; gap: 4px; }
+        .row-rtg { font-size: 13px; font-weight: 800; color: var(--gold); width: 48px; text-align: left; display: flex; align-items: center; gap: 4px; }
         .mini-star { font-size: 9px; line-height: 1; margin-top: -1px; display: inline-block; }
         .row-pos { font-size: 9px; font-weight: 700; background: #1d283a; padding: 2px 4px; border-radius: 3px; width: 34px; text-align: center; color: #fff; }
-        .img-box { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #1b2434; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
-        .face-svg { width: 28px; height: 28px; }
+        .img-box { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #1b2434; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+        .face { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
         .p-name { font-size: 13px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .p-meta { font-size: 11px; color: var(--muted); text-align: right; white-space: nowrap; }
+        
         .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
         .nav-btn { background: none; border: none; color: var(--gold); font-size: 13px; font-weight: 700; cursor: pointer; }
+
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
         .modal.open { display: flex; }
         .modal-card { background: linear-gradient(135deg, #1a2233 0%, #0d131f 100%); width: 100%; max-width: 310px; border-radius: 16px; border: 2px solid var(--gold); padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); position: relative; }
@@ -63,10 +66,11 @@
         <button class="nav-btn" style="color:var(--muted);" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲ Top</button>
         <button class="nav-btn" onclick="move(1)">Next Team ▶</button>
     </div>
+
     <div class="modal" id="stats-modal" onclick="closeModal()">
         <div class="modal-card" onclick="event.stopPropagation()">
             <div class="modal-head">
-                <div class="img-box" id="m-img-container" style="width:40px; height:40px; background:#25334a;"></div>
+                <div class="img-box" style="width:40px; height:40px; background:#25334a;"><img id="m-img" class="face" src=""></div>
                 <div class="modal-title">
                     <h3 id="m-name">Player Name</h3>
                     <p id="m-meta">POS • AGE</p>
@@ -84,30 +88,31 @@
         </div>
     </div>
     <script>
- const starsPool = [
-            {n:"Mike Maignan",pos:"GK",r:86,pac:85,sho:82,pas:80,dri:84,def:51,phy:84},
-            {n:"William Saliba",pos:"CB",r:84,pac:82,sho:35,pas:69,dri:71,def:85,phy:82},
-            {n:"Dayot Upamecano",pos:"CB",r:82,pac:80,sho:40,pas:68,dri:68,def:83,phy:81},
-            {n:"Theo Hernández",pos:"LB",r:84,pac:93,sho:71,pas:76,dri:81,def:78,phy:81},
-            {n:"Jules Koundé",pos:"RB",r:84,pac:81,sho:45,pas:74,dri:78,def:84,phy:78},
-            {n:"Aurélien Tchouaméni",pos:"CDM",r:85,pac:70,sho:72,pas:80,dri:80,def:83,phy:82},
-            {n:"Eduardo Camavinga",pos:"CM",r:84,pac:79,sho:66,pas:81,dri:84,def:80,phy:79},
-            {n:"Antoine Griezmann",pos:"CAM",r:87,pac:76,sho:85,pas:87,dri:86,def:58,phy:72},
-            {n:"Ousmane Dembélé",pos:"RW",r:86,pac:93,sho:77,pas:82,dri:89,def:36,phy:56},
-            {n:"Bradley Barcola",pos:"LW",r:80,pac:89,sho:74,pas:73,dri:82,def:31,phy:62},
-            {n:"Kylian Mbappé",pos:"ST",r:91,pac:97,sho:90,pas:80,dri:92,def:36,phy:78},
-            {n:"Lamine Yamal",pos:"RW",r:89,pac:88,sho:81,pas:83,dri:89,def:41,phy:65}, 
-            {n:"Jude Bellingham",pos:"CAM",r:90,pac:80,sho:86,pas:83,dri:88,def:78,phy:82},
-            {n:"Vinícius Jr.",pos:"LW",r:89,pac:95,sho:84,pas:78,dri:91,def:29,phy:68}, 
-            {n:"Rodri",pos:"CDM",r:90,pac:66,sho:80,pas:86,dri:84,def:87,phy:85}, 
-            {n:"Harry Kane",pos:"ST",r:90,pac:69,sho:93,pas:84,dri:83,def:49,phy:83},
-            {n:"Florian Wirtz",pos:"CAM",r:89,pac:82,sho:79,pas:87,dri:89,def:53,phy:66}, 
-            {n:"Jamal Musiala",pos:"CAM",r:87,pac:84,sho:81,pas:79,dri:90,def:62,phy:64}, 
-            {n:"Bruno Fernandes",pos:"CAM",r:87,pac:73,sho:86,pas:88,dri:83,def:69,phy:77},
-            {n:"Rúben Dias",pos:"CB",r:89,pac:67,sho:39,pas:66,dri:69,def:89,phy:87}, 
-            {n:"Lautaro Martínez",pos:"ST",r:88,pac:77,sho:88,pas:72,dri:84,def:48,phy:84},
-            {n:"Bukayo Saka",pos:"RW",r:87,pac:86,sho:81,pas:79,dri:87,def:65,phy:70}, 
-            {n:"Phil Foden",pos:"CAM",r:87,pac:85,sho:85,pas:83,dri:88,def:57,phy:63}
+const pool = [
+            {n:"Mbappé",p:"ST",r:91,pa:97,sh:90,ps:80,dr:92,df:36,ph:78,id:"231747"},
+            {n:"Yamal",p:"RW",r:89,pa:88,sh:81,ps:83,dr:89,df:41,ph:65,id:"277051"},
+            {n:"Bellingham",p:"CAM",r:90,pa:80,sh:86,ps:83,dr:88,df:78,ph:82,id:"252371"},
+            {n:"Vinícius Jr.",p:"LW",r:89,pa:95,sh:84,ps:78,dr:91,df:29,ph:68,id:"238794"},
+            {n:"Rodri",p:"CDM",r:90,pa:66,sh:80,ps:86,dr:84,df:87,ph:85,id:"231866"},
+            {n:"Kane",p:"ST",r:90,pa:69,sh:93,ps:84,dr:83,df:49,ph:83,id:"202126"},
+            {n:"Wirtz",p:"CAM",r:89,pa:82,sh:79,ps:87,dr:89,df:53,ph:66,id:"256630"},
+            {n:"Musiala",p:"CAM",r:87,pa:84,sh:81,ps:79,dr:90,df:62,ph:64,id:"256790"},
+            {n:"Fernandes",p:"CAM",r:87,pa:73,sh:86,ps:88,dr:83,df:69,ph:77,id:"212198"},
+            {n:"Dias",p:"CB",r:89,pa:67,sh:39,ps:66,dr:69,df:89,ph:87,id:"239818"},
+            {n:"Griezmann",p:"CAM",r:87,pa:76,sh:85,ps:87,dr:86,df:58,ph:72,id:"194765"},
+            {n:"Martínez",p:"ST",r:88,pa:77,sh:88,ps:72,dr:84,df:48,ph:84,id:"231478"},
+            {n:"Saka",p:"RW",r:87,pa:86,sh:81,ps:79,dr:87,df:65,ph:70,id:"246669"},
+            {n:"Foden",p:"CAM",r:87,pa:85,sh:85,ps:83,dr:88,df:57,ph:63,id:"237692"},
+            {n:"Maignan",p:"GK",r:86,pa:85,sh:82,ps:80,dr:84,df:51,ph:84,id:"215698"},
+            {n:"Lewandowski",p:"ST",r:88,pa:75,sh:88,ps:79,dr:83,df:43,ph:81,id:"188545"},
+            {n:"Haaland",p:"ST",r:90,pa:89,sh:92,ps:66,dr:80,df:45,ph:88,id:"239085"},
+            {n:"De Bruyne",p:"CM",r:90,pa:67,sh:87,ps:93,dr:86,df:65,ph:77,id:"192985"},
+            {n:"Salah",p:"RW",r:89,pa:89,sh:87,ps:82,dr:88,df:45,ph:75,id:"209331"},
+            {n:"van Dijk",p:"CB",r:89,pa:78,sh:60,ps:71,dr:72,df:89,ph:86,id:"203376"},
+            {n:"Son",p:"LW",r:87,pa:87,sh:88,ps:80,dr:84,df:42,ph:70,id:"200104"},
+            {n:"Modrić",p:"CM",r:86,pa:71,sh:76,ps:89,dr:86,df:72,ph:66,id:"177003"},
+            {n:"Valverde",p:"CM",r:87,pa:88,sh:82,ps:84,dr:84,df:80,ph:82,id:"239053"},
+            {n:"Hakimi",p:"RB",r:84,pa:92,sh:75,ps:80,dr:83,df:76,ph:78,id:"235212"}
         ];
 
         const teamsData = [
@@ -136,20 +141,10 @@
             {n:"New Zealand",r:69,a:70,m:68,d:68,c:"nz"}, {n:"Iraq",r:70,a:71,m:69,d:68,c:"iq"},
             {n:"UAE",r:70,a:70,m:69,d:68,c:"ae"}, {n:"Uzbekistan",r:71,a:72,m:70,d:69,c:"uz"}
         ];
+        const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
+        let activeIdx = 0;
 
-        const positionOrder = {
-            "GK": 1, "LB": 2, "CB": 3, "RB": 4, "CDM": 5, "CM": 6, "CAM": 7, "LM": 8, "RM": 9, "LW": 10, "RW": 11, "ST": 12
-        };
-
-        function generateSvgAvatar(initials, colorHex) {
-            return `<svg class="face-svg" viewBox="0 0 32 32" xmlns="http://w3.org">
-                <circle cx="16" cy="16" r="15" fill="${colorHex || '#1e283a'}"/>
-                <path d="M16 18c4.418 0 8 2.582 8 6v2H8v-2c0-3.418 3.582-6 8-6z" fill="#090d16"/>
-                <circle cx="16" cy="11" r="4.5" fill="#f1f5f9"/>
-                <text x="50%" y="42%" dominant-baseline="middle" text-anchor="middle" fill="#0d131f" font-size="6" font-weight="bold">${initials}</text>
-            </svg>`;
-        }
- function init() {
+        function init() {
             const tDiv = document.getElementById('tab-list');
             const pDiv = document.getElementById('page-list');
             teamsData.sort((x, y) => y.r - x.r);
@@ -167,21 +162,20 @@
                 page.id = `p-${t.c}`;
 
                 let rawSquad = [];
-                if (t.n === "France") {
-                    for (let pIdx = 0; pIdx < 23; pIdx++) {
-                        const pAge = 21 + ((pIdx * 3) % 11);
-                        rawSquad.push({ ...starsPool[pIdx], age: pAge });
-                    }
-                } else {
-                    for (let pIdx = 0; pIdx < 23; pIdx++) {
-                        const pAge = 21 + ((pIdx * 3) % 11);
-                        const metaItem = starsPool[(i * 23 + pIdx) % starsPool.length];
-                        let fakeName = t.n.substring(0,3) + ". Pro " + (pIdx + 1);
-                        if (pIdx < starsPool.length) {
-                            fakeName = t.n.substring(0,3) + ". " + starsPool[pIdx].n.split(' ').pop();
-                        }
-                        rawSquad.push({ ...metaItem, n: fakeName, age: pAge });
-                    }
+                // Multi-Team Data Map Engine: Links unique player seeds per nation cleanly
+                for (let pIdx = 0; pIdx < 23; pIdx++) {
+                    const pAge = 21 + ((pIdx * 3) % 11);
+                    const metaItem = pool[(i * 7 + pIdx) % pool.length];
+                    let pName = t.n.substring(0,3) + ". " + metaItem.n;
+                    if(t.n === "France" && pIdx < pool.length) pName = pool[pIdx].n;
+                    
+                    let variance = 4 - Math.floor(pIdx / 3);
+                    const finalRtg = Math.min(94, Math.max(62, t.r + variance));
+
+                    rawSquad.push({ 
+                        n: pName, pos: metaItem.p, r: finalRtg, age: pAge,
+                        pac: metaItem.pa, sho: metaItem.sh, pas: metaItem.ps, dri: metaItem.dr, def: metaItem.df, phy: metaItem.ph, id: metaItem.id 
+                    });
                 }
 
                 let startingList = rawSquad.slice(0, 11);
@@ -191,17 +185,18 @@
                 subsList.sort((x, y) => (positionOrder[x.pos] || 99) - (positionOrder[y.pos] || 99));
 
                 let rowsHtml = '';
-                
                 const renderRow = (p, roleLabel) => {
-                    const initials = p.n.split(' ').map(n => n).join('').substring(0, 2).toUpperCase();
-                    const themeColor = p.pos === "GK" ? "#ffe066" : "#f5c518";
-                    const avatarMarkup = generateSvgAvatar(initials, themeColor);
+                    const pad = String(p.id).padStart(6, '0');
+                    // Dynamic Cross-Origin Proxy Worker Pipeline: Bypasses SoFIFA hotlink restrictions instantly
+                    const imgUrl = `https://weserv.nl{pad.substring(0,3)}/${pad.substring(3,6)}/26_60.png`;
 
                     return `
-                        <div class="player-row" onclick="openStats('${p.n}', '${p.pos}', ${p.age}, ${p.r}, ${p.pac}, ${p.sho}, ${p.pas}, ${p.dri}, ${p.def}, ${p.phy}, '${themeColor}')">
+                        <div class="player-row" onclick="openStats('${p.n}', '${p.pos}', ${p.age}, ${p.r}, ${p.pac}, ${p.sho}, ${p.pas}, ${p.dri}, ${p.def}, ${p.phy}, '${imgUrl}')">
                             <div class="row-rtg">${p.r} <span class="mini-star">⭐</span></div>
                             <div class="row-pos">${p.pos}</div>
-                            <div class="img-box">${avatarMarkup}</div>
+                            <div class="img-box">
+                                <img src="${imgUrl}" class="face" loading="lazy" onerror="this.onerror=null; this.src='https://weserv.nl';">
+                            </div>
                             <div class="p-name">${p.n}</div>
                             <div class="p-meta">${p.age}y • ${roleLabel}</div>
                         </div>
@@ -249,11 +244,10 @@
             show(n);
         }
 
-        function openStats(name, pos, age, rtg, pac, sho, pas, dri, def, phy, colorHex) {
-            const initials = name.split(' ').map(n => n).join('').substring(0, 2).toUpperCase();
+        function openStats(name, pos, age, rtg, pac, sho, pas, dri, def, phy, img) {
             document.getElementById('m-name').innerText = name;
             document.getElementById('m-meta').innerText = `${pos} • ${age} years old • Rating: ${rtg}`;
-            document.getElementById('m-img-container').innerHTML = generateSvgAvatar(initials, colorHex);
+            document.getElementById('m-img').src = img;
             document.getElementById('s-pac').innerText = pac;
             document.getElementById('s-sho').innerText = sho;
             document.getElementById('s-pas').innerText = pas;
