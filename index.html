@@ -50,7 +50,7 @@
         .modal-title p { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 2px; white-space: nowrap; }
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
         .stat-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 0.5px; }
+        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
         .stat-val { font-size: 15px; font-weight: 800; color: var(--gold); }
         .close-modal-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
     </style>
@@ -88,31 +88,60 @@
         </div>
     </div>
     <script>
-const pool = [
-            {n:"Kylian Mbappé",p:"ST",r:91,pa:97,sh:90,ps:80,dr:92,df:36,ph:78,id:"231747"},
-            {n:"Lamine Yamal",p:"RW",r:89,pa:88,sh:81,ps:83,dr:89,df:41,ph:65,id:"277051"},
-            {n:"Jude Bellingham",p:"CAM",r:90,pa:80,sh:86,ps:83,dr:88,df:78,ph:82,id:"252371"},
-            {n:"Vinícius Júnior",p:"LW",r:89,pa:95,sh:84,ps:78,dr:91,df:29,ph:68,id:"238794"},
-            {n:"Rodri Cascante",p:"CDM",r:90,pa:66,sh:80,ps:86,dr:84,df:87,ph:85,id:"231866"},
-            {n:"Harry Kane",p:"ST",r:90,pa:69,sh:93,ps:84,dr:83,df:49,ph:83,id:"202126"},
-            {n:"Florian Wirtz",p:"CAM",r:89,pa:82,sh:79,ps:87,dr:89,df:53,ph:66,id:"256630"},
-            {n:"Jamal Musiala",p:"CAM",r:87,pa:84,sh:81,ps:79,dr:90,df:62,ph:64,id:"256790"},
-            {n:"Bruno Fernandes",p:"CAM",r:87,pa:73,sh:86,ps:88,dr:83,df:69,ph:77,id:"212198"},
-            {n:"Rúben Dias",p:"CB",r:89,pa:67,sh:39,ps:66,dr:69,df:89,ph:87,id:"239818"},
-            {n:"Antoine Griezmann",p:"CAM",r:87,pa:76,sh:85,ps:87,dr:86,df:58,ph:72,id:"194765"},
-            {n:"Lautaro Martínez",p:"ST",r:88,pa:77,sh:88,ps:72,dr:84,df:48,ph:84,id:"231478"},
-            {n:"Bukayo Saka",p:"RW",r:87,pa:86,sh:81,ps:79,dr:87,df:65,ph:70,id:"246669"},
-            {n:"Phil Foden",p:"CAM",r:87,pa:85,sh:85,ps:83,dr:88,df:57,ph:63,id:"237692"},
-            {n:"Mike Maignan",p:"GK",r:86,pa:85,sh:82,ps:80,dr:84,df:51,ph:84,id:"215698"},
-            {n:"Robert Lewandowski",p:"ST",r:88,pa:75,sh:88,ps:79,dr:83,df:43,ph:81,id:"188545"},
-            {n:"Erling Haaland",p:"ST",r:90,pa:89,sh:92,ps:66,dr:80,df:45,ph:88,id:"239085"},
-            {n:"Kevin De Bruyne",p:"CM",r:90,pa:67,sh:87,ps:93,dr:86,df:65,ph:77,id:"192985"},
-            {n:"Mohamed Salah",p:"RW",r:89,pa:89,sh:87,ps:82,dr:88,df:45,ph:75,id:"209331"},
-            {n:"Virgil van Dijk",p:"CB",r:89,pa:78,sh:60,ps:71,dr:72,df:89,ph:86,id:"203376"},
-            {n:"Son Heung Min",p:"LW",r:87,pa:87,sh:88,ps:80,dr:84,df:42,ph:70,id:"200104"},
-            {n:"Luka Modrić",p:"CM",r:86,pa:71,sh:76,ps:89,dr:86,df:72,ph:66,id:"177003"},
-            {n:"Federico Valverde",p:"CM",r:87,pa:88,sh:82,ps:84,dr:84,df:80,ph:82,id:"239053"},
-            {n:"Achraf Hakimi",p:"RB",r:84,pa:92,sh:75,ps:80,dr:83,df:76,ph:78,id:"235212"}
+ const teamsData = [
+            {n:"France",r:86,a:87,m:85,d:85,c:"fr", p:["Mike Maignan","William Saliba","Dayot Upamecano","Theo Hernández","Jules Koundé","Aurélien Tchouaméni","Eduardo Camavinga","Antoine Griezmann","Ousmane Dembélé","Bradley Barcola","Kylian Mbappé","Brice Samba","Ibrahima Konaté","Ferland Mendy","N'Golo Kanté","Adrien Rabiot","Warren Zaïre-Emery","Marcus Thuram","Kingsley Coman","Randal Kolo Muani","Benjamin Pavard","Jonathan Clauss","Alphonse Areola"]},
+            {n:"Spain",r:85,a:85,m:86,d:83,c:"es", p:["Unai Simón","Aymeric Laporte","Robin Le Normand","Marc Cucurella","Dani Carvajal","Rodri Cascante", "Pedri González","Dani Olmo","Nico Williams","Lamine Yamal","Álvaro Morata","David Raya","Daniel Vivian","Alex Grimaldo","Pedro Porro","Fabian Ruiz","Martin Zubimendi", "Mikel Merino","Mikel Oyarzabal","Ferran Torres", "Ayoze Pérez","Álex Baena","Alex Remiro"]},
+            {n:"England",r:84,a:86,m:85,d:83,c:"en", p:["Jordan Pickford","John Stones","Marc Guéhi","Luke Shaw","Kyle Walker","Declan Rice", "Kobbie Mainoo","Jude Bellingham","Phil Foden","Bukayo Saka","Harry Kane","Aaron Ramsdale","Ezri Konsa","Joe Gomez","Trent Alexander-Arnold","Adam Wharton","Conor Gallagher", "Cole Palmer","Anthony Gordon","Jarrod Bowen","Ollie Watkins", "Ivan Toney","Dean Henderson"]},
+            {n:"Portugal",r:84,a:84,m:86,d:84,c:"pt", p:["Diogo Costa","Rúben Dias","Pepe Ferreira","Nuno Mendes","João Cancelo","João Palhinha", "Vitinha Sanches","Bruno Fernandes","Rafael Leão","Bernardo Silva","Cristiano Ronaldo","José Sá","António Silva","Gonçalo Inácio","Diogo Dalot","Rúben Neves", "João Neves","Otávio Silva","João Félix", "Pedro Neto","Diogo Jota","Gonçalo Ramos","Rui Patrício"]},
+            {n:"Brazil",r:83,a:86,m:81,d:83,c:"br", p:["Alisson Becker","Marquinhos Corrêa","Éder Militão","Guilherme Arana","Danilo da Silva","Bruno Guimarães", "João Gomes","Lucas Paquetá", "Vinícius Jr.","Rodrygo Goes","Raphinha Dias","Bento Krepski","Gabriel Magalhães","Lucas Beraldo","Wendell Borges","Ederson Silva", "Douglas Luiz","Andreas Pereira","Endrick Sousa","Savinho Moreira","Gabriel Martinelli","Evanilson Lima","Rafael Pires"]},
+            {n:"Argentina",r:83,a:84,m:83,d:80,c:"ar", p:["Emi Martínez", "Cristian Romero","Lisandro Martínez", "Nicolás Tagliafico", "Nahuel Molina", "Enzo Fernández", "Alexis Mac Allister", "Rodrigo De Paul", "Nicolás González", "Lionel Messi", "Lautaro Martínez", "Franco Armani", "Nicolás Otamendi", "Marcos Acuña", "Gonzalo Montiel", "Leandro Paredes", "Giovani Lo Celso", "Exequiel Palacios", "Ángel Di María", "Julián Álvarez", "Alejandro Garnacho", "Valentin Carboni", "Geronimo Rulli"]},
+            {n:"Germany",r:82,a:81,m:83,d:80,c:"de", p:["Marc ter Stegen","Jonathan Tah", "Antonio Rüdiger", "Maximilian Mittelstädt", "Joshua Kimmich", "Robert Andrich", "Toni Kroos", "Ilkay Gündogan", "Florian Wirtz", "Jamal Musiala", "Kai Havertz", "Oliver Baumann", "Nico Schlotterbeck", "Waldemar Anton", "David Raum", "Benjamin Henrichs", "Pascal Gross", "Emre Can", "Chris Führich", "Leroy Sané", "Thomas Müller", "Niclas Füllkrug", "Deniz Undav"]},
+            {n:"Italy",r:82,a:80,m:82,d:82,c:"it", p:["G. Donnarumma", "Alessandro Bastoni", "Gianluca Mancini", "Federico Dimarco", "G. Di Lorenzo", "Jorginho Frello", "Nicolò Barella", "Davide Frattesi", "Federico Chiesa", "Lorenzo Pellegrini", "Gianluca Scamacca", "Guglielmo Vicario", "Alessandro Buongiorno", "Federico Gatti", "Matteo Darmian", "Raoul Bellanova", "Bryan Cristante", "Nicolò Fagioli", "Mattia Zaccagni", "Stephan El Shaarawy", "Giacomo Raspadori", "Mateo Retegui", "Alex Meret"]},
+            {n:"Netherlands",r:82,a:80,m:81,d:83,c:"nl", p:["Bart Verbruggen", "Virgil van Dijk", "Stefan de Vrij", "Nathan Aké", "Denzel Dumfries", "Jerdy Schouten", "Tijjani Reijnders", "Xavi Simons", "Cody Gakpo", "Steven Bergwijn", "Memphis Depay", "Justin Bijlow", "Matthijs de Ligt", "Micky van de Ven", "Daley Blind", "Lutsharel Geertruida", "Joey Veerman", "Ryan Gravenberch", "Georginio Wijnaldum", "Donyell Malen", "Jeremie Frimpong", "Wout Weghorst", "Mark Flekken"]},
+            {n:"Belgium",r:81,a:80,m:81,d:79,c:"be", p:["Koen Casteels", "Wout Faes", "Jan Vertonghen", "Arthur Theate", "Timothy Castagne", "Amadou Onana", "Orel Mangala", "Kevin De Bruyne", "Jérémy Doku", "Leandro Trossard", "Romelu Lukaku", "Thomas Kaminski", "Zeno Debast", "Maxim De Cuyper", "Thomas Meunier", "Axel Witsel", "Youri Tielemans", "Charles De Ketelaere", "Johan Bakayoko", "Dodi Lukebakio", "Yannick Carrasco", "Lois Openda", "Matz Sels"]},
+            {n:"Croatia",r:80,a:77,m:82,d:79,c:"hr", p:["Dominik Livaković", "Josip Šutalo", "Marin Pongračić", "Joško Gvardiol", "Josip Stanišić", "Marcelo Brozović", "Mateo Kovačić", "Luka Modrić", "Lauro Majer", "Andrej Kramarić", "Ante Budimir", "Nediljko Labrović", "Domagoj Vida", "Martin Erlić", "Borna Sosa", "Josip Juranović", "Mario Pašalić", "Luka Sučić", "Martin Baturina", "Ivan Perišić", "Luka Ivanušec", "Bruno Petković", "Ivica Ivušić"]},
+            {n:"Uruguay",r:80,a:80,m:81,d:78,c:"uy", p:["Sergio Rochet", "Ronald Araújo", "José María Giménez", "Mathías Olivera", "Nahitan Nández", "Manuel Ugarte", "Federico Valverde", "Nicolás de la Cruz", "Facundo Pellistri", "Maximilian Araújo", "Darwin Núñez", "Santiago Mele", "Sebastián Cáceres", "Lucas Olaza", "Guillermo Varela", "Matías Viña", "Rodrigo Bentancur", "Giorgian de Arrascaeta", "Brian Rodríguez", "Cristian Olivera", "Facundo Torres", "Luis Suárez", "Franco Israel"]},
+            {n:"Morocco",r:80,a:79,m:80,d:79,c:"ma", p:["Yassine Bounou", "Nayef Aguerd", "Romain Saïss", "Yahia Attiyat Allah", "Achraf Hakimi", "Sofyan Amrabat", "Azzedine Ounahi", "Selim Amallah", "Hakim Ziyech", "Sofiane Boufal", "Youssef En-Nesyri", "Munir Mohamedi", "Jawad El Yamiq", "Achraf Dari", "Badr Benoun", "Yahya Jabrane", "Abde Ezzalzouli", "Bilal El Khannouss", "Anass Zaroury", "Zakaria Aboukhlal", "Walid Cheddira", "Abderrazak Hamdallah", "Ahmed Reda Tagnaouti"]},
+            {n:"USA",r:79,a:78,m:79,d:78,c:"us", p:["Matt Turner", "Tim Ream", "Chris Richards", "Antonee Robinson", "Joe Scally", "Tyler Adams", "Weston McKennie", "Gio Reyna", "Christian Pulisic", "Timothy Weah", "Folarin Balogun", "Ethan Horvath", "Miles Robinson", "Cameron Carter-Vickers", "Kristoffer Lund", "Shaq Moore", "Yunus Musah", "Johnny Cardoso", "Malik Tillman", "Brenden Aaronson", "Haji Wright", "Ricardo Pepi", "Sean Johnson"]},
+            {n:"Colombia",r:79,a:79,m:78,d:77,c:"co", p:["Camilo Vargas", "Davinson Sánchez", "Carlos Cuesta", "Johan Mojica", "Daniel Muñoz", "Jefferson Lerma", "Richard Ríos", "James Rodríguez", "Jhon Arias", "Luis Díaz", "Jhon Córdoba", "David Ospina", "Yerry Mina", "Santi Arias", "Deiver Machado", "Kevin Castaño", "Mateus Uribe", "Juan Fernando Quintero", "Jorge Carrascal", "Luis Sinisterra", "Jhon Durán", "Miguel Borja", "Álvaro Montero"]},
+            {n:"Japan",r:79,a:77,m:79,d:78,c:"jp", p:["Zion Suzuki", "Ko Itakura", "Shogo Taniguchi", "Hiroki Ito", "Yukinari Sugawara", "Wataru Endo", "Hidemasa Morita", "Daichi Kamada", "Takefusa Kubo", "Takumi Minamino", "Ayase Ueda", "Keisuke Osako", "Koki Machida", "Tsuyoshi Watanabe", "Yuto Nagatomo", "Seiya Maikuma", "Ao Tanaka", "Reo Hatate", "Kaoru Mitoma", "Ritsu Doan", "Keito Nakamura", "Takuma Asano", "Daiya Maekawa"]},
+            {n:"Senegal",r:78,a:78,m:77,d:77,c:"sn", p:["Édouard Mendy", "Kalidou Koulibaly", "Abdou Diallo", "Ismail Jakobs", "Youssouf Sabaly", "Nampalys Mendy", "Idrissa Gueye", "Pape Matar Sarr", "Ismaïla Sarr", "Sadio Mané", "Boulaye Dia", "Alfred Gomis", "Pape Abou Cissé", "Formose Mendy", "Fodé Ballo-Touré", "Pathé Ciss", "Cheikhou Kouyaté", "Pape Gueye", "Krépin Diatta", "Ilaman Ndiaye", "Nicolas Jackson", "Famara Diédhiou", "Seny Dieng"]},
+            {n:"Switzerland",r:78,a:76,m:79,d:77,c:"ch", p:["Yann Sommer", "Manuel Akanji", "Remo Freuler", "Ricardo Rodríguez", "Silvan Widmer", "Granit Xhaka", "Denis Zakaria", "Xherdan Shaqiri", "Renato Steffen", "Ruben Vargas", "Breel Embolo", "Gregor Kobel", "Nico Elvedi", "Cédric Zesiger", "Leonidas Stergiou", "Michel Aebischer", "Vincent Sierro", "Ardon Jashari", "Fabian Rieder", "Steven Zuber", "Dan Ndoye", "Zeki Amdouni", "Yvon Mvogo"]},
+            {n:"Denmark",r:78,a:76,m:78,d:77,c:"dk", p:["Kasper Schmeichel", "Andreas Christensen", "Joachim Andersen", "Joakim Mæhle", "Alexander Bah", "Pierre-Emile Højbjerg", "Christian Eriksen", "Thomas Delaney", "Robert Skov", "Jonas Wind", "Rasmus Højlund", "Frederik Rønnow", "Jannik Vestergaard", "Victor Nelsson", "Rasmus Kristensen", "Christian Nørgaard", "Mathias Jensen", "Morton Hjulmand", "Mikkel Damsgaard", "Andreas Skov Olsen", "Yussuf Poulsen", "Kasper Dolberg", "Mads Hermansen"]},
+            {n:"Nigeria",r:78,a:81,m:74,d:75,c:"ng", p:["Stanley Nwabali", "William Troost-Ekong", "Semi Ajayi", "Zaidu Sanusi", "Ola Aina", "Frank Onyeka", "Alex Iwobi", "Samuel Chukwueze", "Moses Simon", "Ademola Lookman", "Victor Osimhen", "Francis Uzoho", "Kenneth Omeruo", "Calvin Bassey", "Bright Osayi-Samuel", "Chidozie Awaziem", "Wilfried Ndidi", "Alhassan Yusuf", "Kelechi Iheanacho", "Ahmed Musa", "Terem Moffi", "Victor Boniface", "Olorunleke Ojo"]},
+            {n:"Mexico",r:76,a:78,m:75,d:75,c:"mx", p:["Luis Malagón", "César Montes", "Johan Vásquez", "Gerardo Arteaga", "Jorge Sánchez", "Edson Álvarez", "Luis Chávez", "Erick Sánchez", "Uriel Antuna", "Julián Quiñones", "Santiago Giménez", "Julio González", "Israel Reyes", "Bryan González", "Brian García", "Luis Romo", "Carlos Rodríguez", "Orbelín Pineda", "Alexis Vega", "César Huerta", "Guillermo Martínez", "Marcelo Flores", "Carlos Acevedo"]},
+
+  const starsPool = [
+            {n:"Mike Maignan",pos:"GK",r:86,pac:85,sho:82,pas:80,dri:84,def:51,phy:84,id:"215698"},
+            {n:"William Saliba",pos:"CB",r:84,pac:82,sho:35,pas:69,dri:71,def:85,phy:82,id:"243580"},
+            {n:"Theo Hernández",pos:"LB",r:84,pac:93,sho:71,pas:76,dri:81,def:78,phy:81,id:"232656"},
+            {n:"Jules Koundé",pos:"RB",r:84,pac:81,sho:45,pas:74,dri:78,def:84,phy:78,id:"235410"},
+            {n:"Aurélien Tchouaméni",pos:"CDM",r:85,pac:70,sho:72,pas:80,dri:80,def:83,phy:82,id:"241637"},
+            {n:"Eduardo Camavinga",pos:"CM",r:84,pac:79,sho:66,pas:81,dri:84,def:80,phy:79,id:"248242"},
+            {n:"Antoine Griezmann",pos:"CAM",r:87,pac:76,sho:85,pas:87,dri:86,def:58,phy:72,id:"194765"},
+            {n:"Ousmane Dembélé",pos:"RW",r:86,pac:93,sho:77,pas:82,dri:89,def:36,phy:56,id:"231443"},
+            {n:"Kylian Mbappé",pos:"ST",r:91,pac:97,sho:90,pas:80,dri:92,def:36,phy:78,id:"231747"},
+            {n:"Rodri Cascante",pos:"CDM",r:90,pac:66,sho:80,pas:86,dri:84,def:87,phy:85,id:"231866"},
+            {n:"Lamine Yamal",pos:"RW",r:89,pac:88,sho:81,pas:83,dri:89,def:41,phy:65,id:"277051"},
+            {n:"Pedri González",pos:"CM",r:86,pac:76,sho:69,pas:84,dri:86,def:68,phy:65,id:"251854"},
+            {n:"Nico Williams",pos:"LW",r:85,pac:93,sho:77,pas:78,dri:86,def:38,phy:66,id:"258729"},
+            {n:"Dani Olmo",pos:"CAM",r:84,pac:76,sho:81,pas:82,dri:86,def:49,phy:62,id:"244369"},
+            {n:"Harry Kane",pos:"ST",r:90,pac:69,sho:93,pas:84,dri:83,def:49,phy:83,id:"202126"},
+            {n:"Jude Bellingham",pos:"CAM",r:90,pac:80,sho:86,pas:83,dri:88,def:78,phy:82,id:"252371"},
+            {n:"Bukayo Saka",pos:"RW",r:87,pac:86,sho:81,pas:79,dri:87,def:65,phy:70,id:"246669"},
+            {n:"Phil Foden",pos:"CAM",r:87,pac:85,sho:85,pas:83,dri:88,def:57,phy:63,id:"237692"},
+            {n:"Declan Rice",pos:"CDM",r:86,pac:74,sho:67,pas:76,dri:78,def:83,phy:82,id:"234396"},
+            {n:"Vinícius Jr.",pos:"LW",r:89,pac:95,sho:84,pas:78,dri:91,def:29,phy:68,id:"238794"},
+            {n:"Alisson Becker",pos:"GK",r:88,pac:86,sho:85,pas:83,dri:89,def:50,phy:88,id:"212831"},
+            {n:"Lautaro Martínez",pos:"ST",r:88,pac:77,sho:88,pas:72,dri:84,def:48,phy:84,id:"231478"},
+            {n:"Emiliano Martínez",pos:"GK",r:87,pac:85,sho:83,pas:79,dri:86,def:52,phy:85,id:"202857"}
+        ];
+
+        const genericPool = [
+            {n:"Alexander Pro",p:"ST",pac:82,sho:80,pas:75,dri:81,def:40,phy:75,id:"notfound"},
+            {n:"Christopher Star",p:"CM",pac:74,sho:72,pas:78,dri:76,def:65,phy:72,id:"notfound"},
+            {n:"Daniel Hero",p:"CB",pac:68,sho:40,pas:65,dri:67,def:80,phy:81,id:"notfound"},
+            {n:"Nicholas Champ",p:"GK",pac:79,sho:77,pas:74,dri:78,def:50,phy:76,id:"notfound"}
         ];
 
         const teamsData = [
@@ -141,7 +170,8 @@ const pool = [
             {n:"New Zealand",r:69,a:70,m:68,d:68,c:"nz"}, {n:"Iraq",r:70,a:71,m:69,d:68,c:"iq"},
             {n:"UAE",r:70,a:70,m:69,d:68,c:"ae"}, {n:"Uzbekistan",r:71,a:72,m:70,d:69,c:"uz"}
         ];
- const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
+
+     const positionOrder = { "GK":1, "LB":2, "CB":3, "RB":4, "CDM":5, "CM":6, "CAM":7, "LM":8, "RM":9, "LW":10, "RW":11, "ST":12 };
         let activeIdx = 0;
 
         function init() {
@@ -164,14 +194,28 @@ const pool = [
                 let rawSquad = [];
                 for (let pIdx = 0; pIdx < 23; pIdx++) {
                     const pAge = 21 + ((pIdx * 3) % 11);
-                    const metaItem = pool[(i * 7 + pIdx) % pool.length];
+                    let metaItem;
+
+                    if (t.n === "France") {
+                        metaItem = starsPool[pIdx % 9]; 
+                    } else if (t.n === "Spain") {
+                        metaItem = starsPool[9 + (pIdx % 5)]; 
+                    } else if (t.n === "England") {
+                        metaItem = starsPool[14 + (pIdx % 5)]; 
+                    } else if (t.n === "Brazil") {
+                        metaItem = starsPool[19 + (pIdx % 2)]; 
+                    } else if (t.n === "Argentina") {
+                        metaItem = starsPool[21 + (pIdx % 2)]; 
+                    } else {
+                        metaItem = genericPool[pIdx % genericPool.length];
+                    }
                     
                     let variance = 4 - Math.floor(pIdx / 3);
                     const finalRtg = Math.min(94, Math.max(62, t.r + variance));
 
                     rawSquad.push({ 
-                        n: metaItem.n, pos: metaItem.p, r: finalRtg, age: pAge,
-                        pac: metaItem.pa, sho: metaItem.sh, pas: metaItem.ps, dri: metaItem.dr, def: metaItem.df, phy: metaItem.ph, id: metaItem.id 
+                        n: metaItem.n, pos: metaItem.pos, r: finalRtg, age: pAge,
+                        pac: metaItem.pac, sho: metaItem.sho, pas: metaItem.pas, dri: metaItem.dri, def: metaItem.def, phy: metaItem.phy, id: metaItem.id 
                     });
                 }
 
@@ -183,15 +227,15 @@ const pool = [
 
                 let rowsHtml = '';
                 const renderRow = (p, roleLabel) => {
-                    // EA Sports CDN Pathing Rules: Publicly accessible and fully unblocked
-                    const imgUrl = `https://ea.com{p.id}.png`;
+                    const pad = String(p.id).padStart(6, '0');
+                    const imgUrl = `https://weserv.nl{pad.substring(0,3)}/${pad.substring(3,6)}/26_60.png`;
 
                     return `
                         <div class="player-row" onclick="openStats('${p.n}', '${p.pos}', ${p.age}, ${p.r}, ${p.pac}, ${p.sho}, ${p.pas}, ${p.dri}, ${p.def}, ${p.phy}, '${imgUrl}')">
                             <div class="row-rtg">${p.r} <span class="mini-star">⭐</span></div>
                             <div class="row-pos">${p.pos}</div>
                             <div class="img-box">
-                                <img src="${imgUrl}" class="face" loading="lazy" onerror="this.onerror=null; this.src='https://ea.com';">
+                                <img src="${imgUrl}" class="face" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://weserv.nl';">
                             </div>
                             <div class="p-name">${p.n}</div>
                             <div class="p-meta">${p.age}y • ${roleLabel}</div>
