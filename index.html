@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>World Cup 2026 Grid Browser</title>
+    <style>
+        :root {
+            --bg: #090d16; --card: #111723; --gold: #f5c518; --text: #f1f5f9; --muted: #8e9cae; --border: #1d283a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 75px; overflow-x: hidden; width: 100vw; min-height: 100vh; }
+        header { background: var(--card); padding: 12px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .hdr-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; color: var(--text); }
+        .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { background: #1b2434; color: var(--muted); border: none; padding: 7px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .tab-btn.active { background: var(--gold); color: #000; font-weight: 700; }
+        .container { padding: 12px; max-width: 480px; margin: 0 auto; min-height: calc(100vh - 150px); }
+        .team-page { display: none; }
+        .team-page.active { display: block; }
+        .hero { background: linear-gradient(180deg, #1d283a, var(--card)); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #25334a; }
+        .hero h2 { font-size: 19px; font-weight: 800; }
+        .pills { display: flex; gap: 6px; margin-top: 4px; }
+        .pill { background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px; font-size: 10px; color: var(--muted); }
+        .pill strong { color: var(--gold); }
+        .ovr-circ { background: var(--gold); color: #000; width: 40px; height: 40px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; }
+        .ovr-circ span { font-size: 8px; margin-top: -2px; }
+        .list-container { display: flex; flex-direction: column; gap: 4px; }
+        .player-row { background: var(--card); border: 1px solid var(--border); border-radius: 6px; display: flex; align-items: center; padding: 0 10px; height: 42px; gap: 10px; cursor: pointer; }
+        .player-row:active { background: #1d283a; }
+        .row-rtg { font-size: 13px; font-weight: 800; color: var(--gold); width: 46px; text-align: left; display: flex; align-items: center; gap: 4px; }
+        .mini-star { font-size: 9px; line-height: 1; margin-top: -1px; display: inline-block; }
+        .row-pos { font-size: 9px; font-weight: 700; background: #1d283a; padding: 2px 4px; border-radius: 3px; width: 34px; text-align: center; color: #fff; }
+        .img-box { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #1b2434; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
+        .face-svg { width: 28px; height: 28px; }
+        .p-name { font-size: 13px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .p-meta { font-size: 11px; color: var(--muted); text-align: right; white-space: nowrap; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
+        .nav-btn { background: none; border: none; color: var(--gold); font-size: 13px; font-weight: 700; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+        .modal.open { display: flex; }
+        .modal-card { background: linear-gradient(135deg, #1a2233 0%, #0d131f 100%); width: 100%; max-width: 310px; border-radius: 16px; border: 2px solid var(--gold); padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); position: relative; }
+        .modal-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .modal-title { flex: 1; overflow: hidden; }
+        .modal-title h3 { font-size: 16px; font-weight: 800; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .modal-title p { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 2px; white-space: nowrap; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+        .stat-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 700; }
+        .stat-val { font-size: 15px; font-weight: 800; color: var(--gold); }
+        .close-modal-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="hdr-title">🏆 World Cup 2026 Grid Browser</div>
+        <div class="tabs" id="tab-list"></div>
+    </header>
+    <main class="container" id="page-list"></main>
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="move(-1)">◀ Prev Team</button>
+        <button class="nav-btn" style="color:var(--muted);" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲ Top</button>
+        <button class="nav-btn" onclick="move(1)">Next Team ▶</button>
+    </div>
+    <div class="modal" id="stats-modal" onclick="closeModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div class="modal-head">
+                <div class="img-box" id="m-img-container" style="width:40px; height:40px; background:#25334a;"></div>
+                <div class="modal-title">
+                    <h3 id="m-name">Player Name</h3>
+                    <p id="m-meta">POS • AGE</p>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box"><span class="stat-lbl">PAC Pace</span><span class="stat-val" id="s-pac">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">SHO Shot</span><span class="stat-val" id="s-sho">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">PAS Pass</span><span class="stat-val" id="s-pas">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">DRI Drib</span><span class="stat-val" id="s-dri">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">DEF Def</span><span class="stat-val" id="s-def">--</span></div>
+                <div class="stat-box"><span class="stat-lbl">PHY Phys</span><span class="stat-val" id="s-phy">--</span></div>
+            </div>
+            <button class="close-modal-btn" onclick="closeModal()">Close Details</button>
+        </div>
+    </div>
+    <script>
+const starsPool = [
+            {n:"Mike Maignan",pos:"GK",r:86,pac:85,sho:82,pas:80,dri:84,def:51,phy:84},
+            {n:"Virgil van Dijk",pos:"CB",r:89,pac:78,sho:60,pas:71,dri:72,def:89,phy:86}, 
+            {n:"Rúben Dias",pos:"CB",r:89,pac:67,sho:39,pas:66,dri:69,def:89,phy:87}, 
+            {n:"Achraf Hakimi",pos:"RB",r:84,pac:92,sho:75,pas:80,dri:83,def:76,phy:78},
+            {n:"Rodri",pos:"CDM",r:90,pac:66,sho:80,pas:86,dri:84,def:87,phy:85}, 
+            {n:"Federico Valverde",pos:"CM",r:87,pac:88,sho:82,pas:84,dri:84,def:80,phy:82}, 
+            {n:"Kevin De Bruyne",pos:"CM",r:90,pac:67,sho:87,pas:93,dri:86,def:65,phy:77},
+            {n:"Jude Bellingham",pos:"CAM",r:90,pac:80,sho:86,pas:83,dri:88,def:78,phy:82},
+            {n:"Florian Wirtz",pos:"CAM",r:89,pac:82,sho:79,pas:87,dri:89,def:53,phy:66}, 
+            {n:"Jamal Musiala",pos:"CAM",r:87,pac:84,sho:81,pas:79,dri:90,def:62,phy:64}, 
+            {n:"Bruno Fernandes",pos:"CAM",r:87,pac:73,sho:86,pas:88,dri:83,def:69,phy:77},
+            {n:"Phil Foden",pos:"CAM",r:87,pac:85,sho:85,pas:83,dri:88,def:57,phy:63}, 
+            {n:"Vinícius Jr.",pos:"LW",r:89,pac:95,sho:84,pas:78,dri:91,def:29,phy:68}, 
+            {n:"Son Heung Min",pos:"LW",r:87,pac:87,sho:88,pas:80,dri:84,def:42,phy:70},
+            {n:"Lamine Yamal",pos:"RW",r:89,pac:88,sho:81,pas:83,dri:89,def:41,phy:65}, 
+            {n:"Bukayo Saka",pos:"RW",r:87,pac:86,sho:81,pas:79,dri:87,def:65,phy:70}, 
+            {n:"Mohamed Salah",pos:"RW",r:89,pac:89,sho:87,pas:82,dri:88,def:45,phy:75}, 
+            {n:"Kylian Mbappé",pos:"ST",r:91,pac:97,sho:90,pas:80,dri:92,def:36,phy:78}, 
+            {n:"Harry Kane",pos:"ST",r:90,pac:69,sho:93,pas:84,dri:83,def:49,phy:83},
+            {n:"Antoine Griezmann",pos:"ST",r:87,pac:76,sho:85,pas:87,dri:86,def:58,phy:72}, 
+            {n:"Lautaro Martínez",pos:"ST",r:88,pac:77,sho:88,pas:72,dri:84,def:48,phy:84},
+            {n:"Robert Lewandowski",pos:"ST",r:88,pac:75,sho:88,pas:79,dri:83,def:43,phy:81}, 
+            {n:"Erling Haaland",pos:"ST",r:90,pac:89,sho:92,pas:66,dri:80,def:45,phy:88}, 
+            {n:"Luka Modrić",pos:"CM",r:86,pac:71,sho:76,pas:89,dri:86,def:72,phy:66}
+        ];
+
+        const teamsData = [
+            {n:"France",r:86,a:87,m:85,d:85,c:"fr"}, {n:"Spain",r:85,a:85,m:86,d:83,c:"es"},
+            {n:"England",r:84,a:86,m:85,d:83,c:"en"}, {n:"Portugal",r:84,a:84,m:86,d:84,c:"pt"},
+            {n:"Brazil",r:83,a:86,m:81,d:83,c:"br"}, {n:"Argentina",r:83,a:84,m:83,d:80,c:"ar"},
+            {n:"Germany",r:82,a:81,m:83,d:80,c:"de"}, {n:"Italy",r:82,a:80,m:82,d:82,c:"it"},
+            {n:"Netherlands",r:82,a:80,m:81,d:83,c:"nl"}, {n:"Belgium",r:81,a:80,m:81,d:79,c:"be"},
+            {n:"Croatia",r:80,a:77,m:82,d:79,c:"hr"}, {n:"Uruguay",r:80,a:80,m:81,d:78,c:"uy"},
+            {n:"Morocco",r:80,a:79,m:80,d:79,c:"ma"}, {n:"USA",r:79,a:78,m:79,d:78,c:"us"},
+            {n:"Colombia",r:79,a:79,m:78,d:77,c:"co"}, {n:"Japan",r:79,a:77,m:79,d:78,c:"jp"},
+            {n:"Senegal",r:78,a:78,m:77,d:77,c:"sn"}, {n:"Switzerland",r:78,a:76,m:79,d:77,c:"ch"},
+            {n:"Denmark",r:78,a:76,m:78,d:77,c:"dk"}, {n:"Nigeria",r:78,a:81,m:74,d:75,c:"ng"},
+            {n:"Mexico",r:76,a:78,m:75,d:75,c:"mx"}, {n:"South Korea",r:76,a:79,m:75,d:73,c:"kr"},
+            {n:"Ukraine",r:76,a:76,m:76,d:75,c:"ua"}, {n:"Sweden",r:76,a:80,m:74,d:74,c:"se"},
+            {n:"Poland",r:76,a:77,m:74,d:74,c:"pl"}, {n:"Turkey",r:76,a:75,m:76,d:74,c:"tr"},
+            {n:"Austria",r:76,a:74,m:77,d:75,c:"at"}, {n:"Ecuador",r:76,a:74,m:76,d:76,c:"ec"},
+            {n:"Iran",r:75,a:77,m:73,d:72,c:"ir"}, {n:"Cameroon",r:75,a:76,m:74,d:73,c:"cm"},
+            {n:"Tunisia",r:74,a:72,m:74,d:73,c:"tn"}, {n:"Egypt",r:74,a:77,m:72,d:71,c:"eg"},
+            {n:"Canada",r:74,a:76,m:72,d:72,c:"ca"}, {n:"Chile",r:74,a:73,m:74,d:73,c:"cl"},
+            {n:"Peru",r:74,a:72,m:73,d:73,c:"pe"}, {n:"Saudi Arabia",r:73,a:72,m:73,d:72,c:"sa"},
+            {n:"Australia",r:73,a:71,m:72,d:72,c:"au"}, {n:"Costa Rica",r:72,a:71,m:71,d:71,c:"cr"},
+            {n:"Panama",r:71,a:70,m:71,d:70,c:"pa"}, {n:"Algeria",r:75,a:76,m:75,d:73,c:"dz"},
+            {n:"Ghana",r:75,a:76,m:75,d:74,c:"gh"}, {n:"Ivory Coast",r:76,a:76,m:76,d:75,c:"ci"},
+            {n:"Jamaica",r:72,a:74,m:70,d:69,c:"jm"}, {n:"Honduras",r:70,a:69,m:69,d:68,c:"hn"},
+            {n:"New Zealand",r:69,a:70,m:68,d:68,c:"nz"}, {n:"Iraq",r:70,a:71,m:69,d:68,c:"iq"},
+            {n:"UAE",r:70,a:70,m:69,d:68,c:"ae"}, {n:"Uzbekistan",r:71,a:72,m:70,d:69,c:"uz"}
+        ];
+const positionOrder = {
+            "GK": 1, "LB": 2, "CB": 3, "RB": 4, "CDM": 5, "CM": 6, "CAM": 7, "LM": 8, "RM": 9, "LW": 10, "RW": 11, "ST": 12
+        };
+
+        function generateSvgAvatar(initials, colorHex) {
+            return `<svg class="face-svg" viewBox="0 0 32 32" xmlns="http://w3.org">
+                <circle cx="16" cy="16" r="15" fill="${colorHex || '#1e283a'}"/>
+                <path d="M16 18c4.418 0 8 2.582 8 6v2H8v-2c0-3.418 3.582-6 8-6z" fill="#090d16"/>
+                <circle cx="16" cy="11" r="4.5" fill="#f1f5f9"/>
+                <text x="50%" y="42%" dominant-baseline="middle" text-anchor="middle" fill="#0d131f" font-size="5" font-weight="bold">${initials}</text>
+            </svg>`;
+        }
+
+        function init() {
+            const tDiv = document.getElementById('tab-list');
+            const pDiv = document.getElementById('page-list');
+            teamsData.sort((x, y) => y.r - x.r);
+            
+            teamsData.forEach((t, i) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${i===0?'active':''}`;
+                btn.id = `t-${t.c}`;
+                btn.onclick = () => show(i);
+                btn.innerText = `${t.n} (${t.r})`;
+                tDiv.appendChild(btn);
+
+                const page = document.createElement('div');
+                page.className = `team-page ${i===0?'active':''}`;
+                page.id = `p-${t.c}`;
+
+                let rawSquad = [];
+                for (let pIdx = 0; pIdx < 23; pIdx++) {
+                    const pAge = 20 + ((pIdx * 4) % 13);
+                    const metaItem = starsPool[(i * 23 + pIdx) % starsPool.length];
+                    rawSquad.push({ ...metaItem, age: pAge });
+                }
+
+                let startingList = rawSquad.slice(0, 11);
+                let subsList = rawSquad.slice(11, 23);
+
+                startingList.sort((x, y) => (positionOrder[x.pos] || 99) - (positionOrder[y.pos] || 99));
+                subsList.sort((x, y) => (positionOrder[x.pos] || 99) - (positionOrder[y.pos] || 99));
+
+                let rowsHtml = '';
+                
+                const renderRow = (p, roleLabel) => {
+                    const initials = p.n.split(' ').map(n => n).join('').substring(0, 2).toUpperCase();
+                    const themeColor = p.pos === "GK" ? "#ffe066" : "#f5c518";
+                    const avatarMarkup = generateSvgAvatar(initials, themeColor);
+
+                    return `
+                        <div class="player-row" onclick="openStats('${p.n}', '${p.pos}', ${p.age}, ${p.r}, ${p.pac}, ${p.sho}, ${p.pas}, ${p.dri}, ${p.def}, ${p.phy}, '${themeColor}')">
+                            <div class="row-rtg">${p.r} <span class="mini-star">⭐</span></div>
+                            <div class="row-pos">${p.pos}</div>
+                            <div class="img-box">${avatarMarkup}</div>
+                            <div class="p-name">${p.n}</div>
+                            <div class="p-meta">${p.age}y • ${roleLabel}</div>
+                        </div>
+                    `;
+                };
+
+                startingList.forEach(p => { rowsHtml += renderRow(p, "Starting 11"); });
+                subsList.forEach(p => { rowsHtml += renderRow(p, "Subs"); });
+
+                page.innerHTML = `
+                    <div class="hero">
+                        <div>
+                            <h2>${t.n}</h2>
+                            <div class="pills">
+                                <div class="pill">ATT <strong>${t.a}</strong></div>
+                                <div class="pill">MID <strong>${t.m}</strong></div>
+                                <div class="pill">DEF <strong>${t.d}</strong></div>
+                            </div>
+                        </div>
+                        <div class="ovr-circ"><div>${t.r}</div><span>OVR</span></div>
+                    </div>
+                    <div class="list-container">${rowsHtml}</div>
+                `;
+                pDiv.appendChild(page);
+            });
+            setupSwipe();
+        }
+
+        function show(i) {
+            if(i < 0 || i >= teamsData.length) return;
+            document.querySelectorAll('.team-page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            activeIdx = i;
+            document.getElementById(`p-${teamsData[i].c}`).classList.add('active');
+            const tb = document.getElementById(`t-${teamsData[i].c}`);
+            tb.classList.add('active');
+            tb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function move(dir) {
+            let n = activeIdx + dir;
+            if(n >= teamsData.length) n = 0;
+            if(n < 0) n = teamsData.length - 1;
+            show(n);
+        }
+
+        function openStats(name, pos, age, rtg, pac, sho, pas, dri, def, phy, colorHex) {
+            document.getElementById('m-name').innerText = name;
+            document.getElementById('m-meta').innerText = `${pos} • ${age} years old • Rating: ${rtg}`;
+            document.getElementById('m-img-container').innerHTML = generateSvgAvatar(name.substring(0,2).toUpperCase(), colorHex);
+            document.getElementById('s-pac').innerText = pac;
+            document.getElementById('s-sho').innerText = sho;
+            document.getElementById('s-pas').innerText = pas;
+            document.getElementById('s-dri').innerText = dri;
+            document.getElementById('s-def').innerText = def;
+            document.getElementById('s-phy').innerText = phy;
+            document.getElementById('stats-modal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('stats-modal').classList.remove('open');
+        }
+
+        function setupSwipe() {
+            let touchStartX = 0; let touchEndX = 0;
+            document.addEventListener('touchstart', e => { touchStartX = e.changedTouches.screenX; }, {passive: true});
+            document.addEventListener('touchend', e => { touchEndX = e.changedTouches.screenX; handleSwipe(); }, {passive: true});
+            function handleSwipe() {
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 75) {
+                    if (diff > 0) move(1);
+                    else move(-1);
+                }
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
