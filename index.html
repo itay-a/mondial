@@ -84,31 +84,30 @@
         </div>
     </div>
     <script>
-const starsPool = [
+ const starsPool = [
             {n:"Mike Maignan",pos:"GK",r:86,pac:85,sho:82,pas:80,dri:84,def:51,phy:84},
-            {n:"Virgil van Dijk",pos:"CB",r:89,pac:78,sho:60,pas:71,dri:72,def:89,phy:86}, 
-            {n:"Rúben Dias",pos:"CB",r:89,pac:67,sho:39,pas:66,dri:69,def:89,phy:87}, 
-            {n:"Achraf Hakimi",pos:"RB",r:84,pac:92,sho:75,pas:80,dri:83,def:76,phy:78},
-            {n:"Rodri",pos:"CDM",r:90,pac:66,sho:80,pas:86,dri:84,def:87,phy:85}, 
-            {n:"Federico Valverde",pos:"CM",r:87,pac:88,sho:82,pas:84,dri:84,def:80,phy:82}, 
-            {n:"Kevin De Bruyne",pos:"CM",r:90,pac:67,sho:87,pas:93,dri:86,def:65,phy:77},
+            {n:"William Saliba",pos:"CB",r:84,pac:82,sho:35,pas:69,dri:71,def:85,phy:82},
+            {n:"Dayot Upamecano",pos:"CB",r:82,pac:80,sho:40,pas:68,dri:68,def:83,phy:81},
+            {n:"Theo Hernández",pos:"LB",r:84,pac:93,sho:71,pas:76,dri:81,def:78,phy:81},
+            {n:"Jules Koundé",pos:"RB",r:84,pac:81,sho:45,pas:74,dri:78,def:84,phy:78},
+            {n:"Aurélien Tchouaméni",pos:"CDM",r:85,pac:70,sho:72,pas:80,dri:80,def:83,phy:82},
+            {n:"Eduardo Camavinga",pos:"CM",r:84,pac:79,sho:66,pas:81,dri:84,def:80,phy:79},
+            {n:"Antoine Griezmann",pos:"CAM",r:87,pac:76,sho:85,pas:87,dri:86,def:58,phy:72},
+            {n:"Ousmane Dembélé",pos:"RW",r:86,pac:93,sho:77,pas:82,dri:89,def:36,phy:56},
+            {n:"Bradley Barcola",pos:"LW",r:80,pac:89,sho:74,pas:73,dri:82,def:31,phy:62},
+            {n:"Kylian Mbappé",pos:"ST",r:91,pac:97,sho:90,pas:80,dri:92,def:36,phy:78},
+            {n:"Lamine Yamal",pos:"RW",r:89,pac:88,sho:81,pas:83,dri:89,def:41,phy:65}, 
             {n:"Jude Bellingham",pos:"CAM",r:90,pac:80,sho:86,pas:83,dri:88,def:78,phy:82},
+            {n:"Vinícius Jr.",pos:"LW",r:89,pac:95,sho:84,pas:78,dri:91,def:29,phy:68}, 
+            {n:"Rodri",pos:"CDM",r:90,pac:66,sho:80,pas:86,dri:84,def:87,phy:85}, 
+            {n:"Harry Kane",pos:"ST",r:90,pac:69,sho:93,pas:84,dri:83,def:49,phy:83},
             {n:"Florian Wirtz",pos:"CAM",r:89,pac:82,sho:79,pas:87,dri:89,def:53,phy:66}, 
             {n:"Jamal Musiala",pos:"CAM",r:87,pac:84,sho:81,pas:79,dri:90,def:62,phy:64}, 
             {n:"Bruno Fernandes",pos:"CAM",r:87,pac:73,sho:86,pas:88,dri:83,def:69,phy:77},
-            {n:"Phil Foden",pos:"CAM",r:87,pac:85,sho:85,pas:83,dri:88,def:57,phy:63}, 
-            {n:"Vinícius Jr.",pos:"LW",r:89,pac:95,sho:84,pas:78,dri:91,def:29,phy:68}, 
-            {n:"Son Heung Min",pos:"LW",r:87,pac:87,sho:88,pas:80,dri:84,def:42,phy:70},
-            {n:"Lamine Yamal",pos:"RW",r:89,pac:88,sho:81,pas:83,dri:89,def:41,phy:65}, 
-            {n:"Bukayo Saka",pos:"RW",r:87,pac:86,sho:81,pas:79,dri:87,def:65,phy:70}, 
-            {n:"Mohamed Salah",pos:"RW",r:89,pac:89,sho:87,pas:82,dri:88,def:45,phy:75}, 
-            {n:"Kylian Mbappé",pos:"ST",r:91,pac:97,sho:90,pas:80,dri:92,def:36,phy:78}, 
-            {n:"Harry Kane",pos:"ST",r:90,pac:69,sho:93,pas:84,dri:83,def:49,phy:83},
-            {n:"Antoine Griezmann",pos:"ST",r:87,pac:76,sho:85,pas:87,dri:86,def:58,phy:72}, 
+            {n:"Rúben Dias",pos:"CB",r:89,pac:67,sho:39,pas:66,dri:69,def:89,phy:87}, 
             {n:"Lautaro Martínez",pos:"ST",r:88,pac:77,sho:88,pas:72,dri:84,def:48,phy:84},
-            {n:"Robert Lewandowski",pos:"ST",r:88,pac:75,sho:88,pas:79,dri:83,def:43,phy:81}, 
-            {n:"Erling Haaland",pos:"ST",r:90,pac:89,sho:92,pas:66,dri:80,def:45,phy:88}, 
-            {n:"Luka Modrić",pos:"CM",r:86,pac:71,sho:76,pas:89,dri:86,def:72,phy:66}
+            {n:"Bukayo Saka",pos:"RW",r:87,pac:86,sho:81,pas:79,dri:87,def:65,phy:70}, 
+            {n:"Phil Foden",pos:"CAM",r:87,pac:85,sho:85,pas:83,dri:88,def:57,phy:63}
         ];
 
         const teamsData = [
@@ -137,7 +136,8 @@ const starsPool = [
             {n:"New Zealand",r:69,a:70,m:68,d:68,c:"nz"}, {n:"Iraq",r:70,a:71,m:69,d:68,c:"iq"},
             {n:"UAE",r:70,a:70,m:69,d:68,c:"ae"}, {n:"Uzbekistan",r:71,a:72,m:70,d:69,c:"uz"}
         ];
-const positionOrder = {
+
+        const positionOrder = {
             "GK": 1, "LB": 2, "CB": 3, "RB": 4, "CDM": 5, "CM": 6, "CAM": 7, "LM": 8, "RM": 9, "LW": 10, "RW": 11, "ST": 12
         };
 
@@ -146,11 +146,10 @@ const positionOrder = {
                 <circle cx="16" cy="16" r="15" fill="${colorHex || '#1e283a'}"/>
                 <path d="M16 18c4.418 0 8 2.582 8 6v2H8v-2c0-3.418 3.582-6 8-6z" fill="#090d16"/>
                 <circle cx="16" cy="11" r="4.5" fill="#f1f5f9"/>
-                <text x="50%" y="42%" dominant-baseline="middle" text-anchor="middle" fill="#0d131f" font-size="5" font-weight="bold">${initials}</text>
+                <text x="50%" y="42%" dominant-baseline="middle" text-anchor="middle" fill="#0d131f" font-size="6" font-weight="bold">${initials}</text>
             </svg>`;
         }
-
-        function init() {
+ function init() {
             const tDiv = document.getElementById('tab-list');
             const pDiv = document.getElementById('page-list');
             teamsData.sort((x, y) => y.r - x.r);
@@ -168,10 +167,21 @@ const positionOrder = {
                 page.id = `p-${t.c}`;
 
                 let rawSquad = [];
-                for (let pIdx = 0; pIdx < 23; pIdx++) {
-                    const pAge = 20 + ((pIdx * 4) % 13);
-                    const metaItem = starsPool[(i * 23 + pIdx) % starsPool.length];
-                    rawSquad.push({ ...metaItem, age: pAge });
+                if (t.n === "France") {
+                    for (let pIdx = 0; pIdx < 23; pIdx++) {
+                        const pAge = 21 + ((pIdx * 3) % 11);
+                        rawSquad.push({ ...starsPool[pIdx], age: pAge });
+                    }
+                } else {
+                    for (let pIdx = 0; pIdx < 23; pIdx++) {
+                        const pAge = 21 + ((pIdx * 3) % 11);
+                        const metaItem = starsPool[(i * 23 + pIdx) % starsPool.length];
+                        let fakeName = t.n.substring(0,3) + ". Pro " + (pIdx + 1);
+                        if (pIdx < starsPool.length) {
+                            fakeName = t.n.substring(0,3) + ". " + starsPool[pIdx].n.split(' ').pop();
+                        }
+                        rawSquad.push({ ...metaItem, n: fakeName, age: pAge });
+                    }
                 }
 
                 let startingList = rawSquad.slice(0, 11);
@@ -240,9 +250,10 @@ const positionOrder = {
         }
 
         function openStats(name, pos, age, rtg, pac, sho, pas, dri, def, phy, colorHex) {
+            const initials = name.split(' ').map(n => n).join('').substring(0, 2).toUpperCase();
             document.getElementById('m-name').innerText = name;
             document.getElementById('m-meta').innerText = `${pos} • ${age} years old • Rating: ${rtg}`;
-            document.getElementById('m-img-container').innerHTML = generateSvgAvatar(name.substring(0,2).toUpperCase(), colorHex);
+            document.getElementById('m-img-container').innerHTML = generateSvgAvatar(initials, colorHex);
             document.getElementById('s-pac').innerText = pac;
             document.getElementById('s-sho').innerText = sho;
             document.getElementById('s-pas').innerText = pas;
