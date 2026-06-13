@@ -1,0 +1,7 @@
+body{font-family:system-ui,sans-serif;background:#0b1220;color:#fff;margin:0}
+header{position:sticky;top:0;background:#111827;padding:12px}
+.card{display:flex;gap:10px;align-items:center;background:#1f2937;margin:8px;padding:8px;border-radius:10px}
+.card img{width:56px;height:56px;border-radius:50%;object-fit:cover}
+.rating{color:#facc15;font-weight:700}
+.controls{display:flex;justify-content:space-between;padding:10px}
+button{padding:10px}

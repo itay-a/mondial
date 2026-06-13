@@ -1,0 +1,20 @@
+{
+  "teams":[
+    {
+      "name":"France",
+      "flag":"🇫🇷",
+      "players":[
+        {"name":"Kylian Mbappe","position":"ST","age":27,"club":"Real Madrid","rating":91,"photo":"https://cdn.sofifa.net/players/231/747/25_120.png"},
+        {"name":"Mike Maignan","position":"GK","age":31,"club":"AC Milan","rating":86,"photo":"https://cdn.sofifa.net/players/215/698/25_120.png"}
+      ]
+    },
+    {
+      "name":"England",
+      "flag":"🏴",
+      "players":[
+        {"name":"Harry Kane","position":"ST","age":33,"club":"Bayern Munich","rating":90,"photo":"https://cdn.sofifa.net/players/202/126/25_120.png"},
+        {"name":"Jude Bellingham","position":"CM","age":23,"club":"Real Madrid","rating":90,"photo":"https://cdn.sofifa.net/players/252/371/25_120.png"}
+      ]
+    }
+  ]
+}
