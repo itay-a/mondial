@@ -1,19 +1,30 @@
 {
-  "teams":[
+  "version": 2,
+  "lastUpdated": "2026-06-15",
+  "teams": [
     {
-      "name":"France",
-      "flag":"🇫🇷",
-      "players":[
-        {"name":"Kylian Mbappe","position":"ST","age":27,"club":"Real Madrid","rating":91,"photo":"https://cdn.sofifa.net/players/231/747/25_120.png"},
-        {"name":"Mike Maignan","position":"GK","age":31,"club":"AC Milan","rating":86,"photo":"https://cdn.sofifa.net/players/215/698/25_120.png"}
-      ]
-    },
-    {
-      "name":"England",
-      "flag":"🏴",
-      "players":[
-        {"name":"Harry Kane","position":"ST","age":33,"club":"Bayern Munich","rating":90,"photo":"https://cdn.sofifa.net/players/202/126/25_120.png"},
-        {"name":"Jude Bellingham","position":"CM","age":23,"club":"Real Madrid","rating":90,"photo":"https://cdn.sofifa.net/players/252/371/25_120.png"}
+      "name": "Croatia",
+      "flag": "🇭🇷",
+      "coach": "Zlatko Dalić",
+      "players": [
+        {
+          "name": "Luka Modrić",
+          "position": "MF",
+          "dob": "1985-09-09",
+          "club": "AC Milan",
+          "rating": 84,
+          "photo": "",
+          "sofifaId": null
+        },
+        {
+          "name": "Joško Gvardiol",
+          "position": "DF",
+          "dob": "2002-01-23",
+          "club": "Manchester City",
+          "rating": 88,
+          "photo": "",
+          "sofifaId": null
+        }
       ]
     }
   ]
