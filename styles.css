@@ -5,3 +5,25 @@ header{position:sticky;top:0;background:#111827;padding:12px}
 .rating{color:#facc15;font-weight:700}
 .controls{display:flex;justify-content:space-between;padding:10px}
 button{padding:10px}
+.modal{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.8);
+ z-index:1000;
+}
+
+.modal-content{
+ background:#1f2937;
+ margin:5vh auto;
+ width:90%;
+ max-width:500px;
+ border-radius:12px;
+ padding:20px;
+}
+
+.close{
+ float:right;
+ font-size:28px;
+ cursor:pointer;
+}

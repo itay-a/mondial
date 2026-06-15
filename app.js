@@ -7,7 +7,9 @@ function render(){
  const t=data[current];
  document.getElementById('teamInfo').innerHTML=`<div>${t.flag} ${t.name} | OVR ${teamRating(t.players)}</div>
  <div class="controls"><button onclick="move(-1)">◀</button><button onclick="move(1)">▶</button></div>`;
- const html=t.players.map(p=>`<div class="card">
+ const html=t.players.map(p=>`<div class="card" onclick='showPlayer(${JSON.stringify(
+  "PLACEHOLDER"
+)})'>
  <img src="${p.photo}" onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent('${"${p.name}"}')">
  <div><div><b>${p.name}</b></div>
  <div>${p.position} • ${getAge(p.dob)} • ${p.club}</div>
@@ -36,4 +38,24 @@ function getAge(dob) {
 
   return age;
 
+}
+function showPlayer(player){
+
+ const img = player.photo ||
+ `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}`;
+
+ document.getElementById('modalBody').innerHTML = `
+   <img src="${img}" style="width:120px;height:120px;border-radius:50%">
+   <h2>${player.name}</h2>
+   <p>${player.position}</p>
+   <p>Age: ${getAge(player.dob)}</p>
+   <p>Club: ${player.club}</p>
+   <p>Rating: ${player.rating}</p>
+ `;
+
+ document.getElementById('playerModal').style.display='block';
+}
+
+function closeModal(){
+ document.getElementById('playerModal').style.display='none';
 }
